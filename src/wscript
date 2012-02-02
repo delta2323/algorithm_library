@@ -5,3 +5,16 @@ def build(bld):
     includes = '.',
     use = 'PTHREAD',
     target = 'modint_test')
+
+  bld.stlib(
+    source = 'edit_distance.cpp',
+    includes = '.',
+    use = 'PTHREAD',
+    target = 'EDITDISTANCE')
+
+  bld.program(
+    features = 'gtest',
+    source = 'edit_distance_test.cpp',
+    includes = '.',
+    use = 'PTHREAD EDITDISTANCE',
+    target = 'edit_distance_test')
