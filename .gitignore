@@ -1,0 +1,7 @@
+*~
+.lock*
+.unittest-gtest/*
+.waf*
+build/*
+src/a.out
+unittest_gtest.pyc

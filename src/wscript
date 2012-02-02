@@ -1,0 +1,7 @@
+def build(bld):
+  bld.program(
+    features = 'gtest',
+    source = 'modint_test.cpp',
+    includes = '.',
+    use = 'PTHREAD',
+    target = 'modint_test')
