@@ -1,10 +1,10 @@
+#ifndef BIT_HPP_
+#define BIT_HPP_
+
 #include <iostream>
 #include <vector>
 #include <climits>
 #include <cmath>
-
-using namespace std;
-
 
 template<typename T>
 class BIT{
@@ -23,7 +23,7 @@ private:
    * (2) n <= nn;
    */
   int nn;
-  vector<T> val;
+  std::vector<T> val;
 
 public:
   BIT(int _n) : n(_n){
@@ -45,7 +45,10 @@ public:
    * whereas access from outside is required to be 0-indexed
    */
   T sum(int i){
-    T s = (T) 0;
+    if(i < 0 || n < i) {
+      throw "out of range";
+    }
+    T s = static_cast<T>(0);
     while(i > 0){
       s += val[i];
       i -= i&-i;
@@ -60,6 +63,10 @@ public:
    */
 
   void add(int i, T x){
+    if(i < 0 || n < i) {
+      throw "out of range";
+    }
+
     i++;
     while(i <= n){
       val[i] += x;
@@ -69,33 +76,4 @@ public:
 
 };
 
-
-
-int main(){
-  int n;cin >> n;
-  BIT<int >  bit(n);
-  for(int i = 0;i<n;i++){
-    cout.width(3);
-    cout<< i << " " ;
-  }
-  cout << endl;
-
-  for(int i = 0;i< n;i++){
-    cout.width(3);
-    cout << (int)( 100 * cos(i)) << " ";
-  }
-  cout << endl;
-
-  for(int i = 0;i<n;i++){
-    bit.add(i, 100 * cos(i));
-  }
-
-  for(int i = 0;i<n;i++){
-    cout.width(3);
-    cout << bit.sum(i) << " ";
-  }
-  cout << endl;
-
-  return 0;
-
-}
+#endif

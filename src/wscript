@@ -6,6 +6,13 @@ def build(bld):
     use = 'PTHREAD',
     target = 'modint_test')
 
+  bld.program(
+    features = 'gtest',
+    source = 'bit_test.cpp',
+    includes = '.',
+    use = 'PTHREAD',
+    target = 'bit_test')
+
   bld.stlib(
     source = 'edit_distance.cpp',
     includes = '.',
