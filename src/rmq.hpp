@@ -1,16 +1,17 @@
+#ifndef RMQ_HPP_
+#define RMQ_HPP_
+
 #include <iostream>
 #include <vector>
 #include <climits>
 #include <cmath>
 
-using namespace std;
 
 /**
  * rmq processes the following qeries 
  * (1) update the value 
  * (2) return the minimum value of [a, b) 
  */
-
 
 template<typename T>
 class RMQ{
@@ -40,7 +41,7 @@ private:
     else{
       int vl = query(a,b,k*2+1, l, (l+r)/2);
       int vr = query(a,b,k*2+2, (l+r)/2, r);
-      return min(vl, vr);
+      return std::min(vl, vr);
     }
   }
 
@@ -52,7 +53,7 @@ private:
    *    3   4     5     6
    *   7 8 9 10 11 12 13 14
    */
-  vector<T> val;
+  std::vector<T> val;
 
 public:
   RMQ(int _n) : n(_n){
@@ -73,14 +74,20 @@ public:
    * in the example above
    * rmq[0+j] = val[7+j]
    */
-  T operator[](size_t at){
-    return val[at+nn-1];
+  T operator[](int idx){
+    if(idx < 0 || n < idx) {
+      throw "out of range";
+    }
+    return val[idx+nn-1];
   }
 
   /**
    * update the value so that rmq[i] = x 
    */
-  void update(int i,int x){
+  void update(int i, int x){
+    if(i < 0 || n < i) {
+      throw "out of range";
+    }
     i += nn-1;
     val[i] = x;
     while(i > 0){
@@ -92,34 +99,15 @@ public:
   /**
    * return the minimum value in rmq[a,b)
    */
-  T mn(int a,int b){
-    return query(a,b,0,0,nn);
+  T mn(int a, int b){
+    if(a >= b) {
+      throw "empty set";
+    }
+    if(a < 0 || n < b) {
+      throw "out of range";
+    }
+    return query(a, b, 0, 0, nn);
   }  
 };
 
-int main(){
-  int n;cin >>n;
-  RMQ<int> rmq(n);
-  for(int i = 0;i<n;i++){
-    rmq.update(i, 100*cos(i));
-  }
-  
-  while(1){
-  for(int i = 0;i<n;i++){
-    cout.width(3);
-    cout << i << " ";
-  }
-  cout << endl;
-  for(int i = 0;i<n;i++){
-    cout.width(3);
-    cout << rmq[i] << " ";
-  }
-  cout << endl;
-
-  int r,l;
-  cin >> l >> r;
-  cout << rmq.mn(l,r) << endl;
-  }
-  return 0;
-
-}
+#endif

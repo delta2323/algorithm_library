@@ -1,4 +1,17 @@
 def build(bld):
+  libs = ['modint', 'bit', 'rmq']
+
+  for lib in libs:
+    test_module = lib + '_test'
+    source_file = test_module + '.cpp'
+    bld.program(
+      features = 'gtest',
+      source = source_file,
+      includes = '.',
+      use = 'PTHREAD',
+      target = test_module)
+
+  '''
   bld.program(
     features = 'gtest',
     source = 'modint_test.cpp',
@@ -12,6 +25,7 @@ def build(bld):
     includes = '.',
     use = 'PTHREAD',
     target = 'bit_test')
+  '''
 
   bld.stlib(
     source = 'edit_distance.cpp',
