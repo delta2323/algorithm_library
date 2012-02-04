@@ -11,7 +11,7 @@ def build(bld):
       use = 'PTHREAD',
       target = test_module)
 
-  libs2 = ['msp', 'edit_distance', 'kmp']
+  libs2 = ['msp', 'edit_distance', 'kmp', 'unionfind']
 
   for lib in libs2:
     source_file_cpp = lib + '.cpp'
