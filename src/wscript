@@ -11,22 +11,30 @@ def build(bld):
       use = 'PTHREAD',
       target = test_module)
 
-  '''
-  bld.program(
-    features = 'gtest',
-    source = 'modint_test.cpp',
-    includes = '.',
-    use = 'PTHREAD',
-    target = 'modint_test')
+      
+  libs2 = ['msp', 'edit_distance']
 
-  bld.program(
-    features = 'gtest',
-    source = 'bit_test.cpp',
-    includes = '.',
-    use = 'PTHREAD',
-    target = 'bit_test')
-  '''
+  for lib in libs2:
+    source_file_cpp = lib + '.cpp'
+    source_file_hpp = lib + '.hpp'
+    source_file_test = lib + '_test.cpp'
+    test_module = lib + '_test'
+    target_module = lib.upper();
 
+    bld.stlib(
+      source = source_file_cpp,
+      includes = '.',
+      use = 'PTHREAD',
+      target = target_module)
+
+    bld.program(
+      features = 'gtest',
+       source = source_file_test,
+       includes = '.',
+       use = ['PTHREAD', target_module],
+       target = test_module)
+
+  '''
   bld.stlib(
     source = 'edit_distance.cpp',
     includes = '.',
@@ -39,3 +47,4 @@ def build(bld):
     includes = '.',
     use = 'PTHREAD EDITDISTANCE',
     target = 'edit_distance_test')
+ '''
