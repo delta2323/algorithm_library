@@ -11,8 +11,7 @@ def build(bld):
       use = 'PTHREAD',
       target = test_module)
 
-      
-  libs2 = ['msp', 'edit_distance']
+  libs2 = ['msp', 'edit_distance', 'kmp']
 
   for lib in libs2:
     source_file_cpp = lib + '.cpp'
@@ -33,18 +32,3 @@ def build(bld):
        includes = '.',
        use = ['PTHREAD', target_module],
        target = test_module)
-
-  '''
-  bld.stlib(
-    source = 'edit_distance.cpp',
-    includes = '.',
-    use = 'PTHREAD',
-    target = 'EDITDISTANCE')
-
-  bld.program(
-    features = 'gtest',
-    source = 'edit_distance_test.cpp',
-    includes = '.',
-    use = 'PTHREAD EDITDISTANCE',
-    target = 'edit_distance_test')
- '''
