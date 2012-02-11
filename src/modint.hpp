@@ -9,18 +9,56 @@ template <int mod>
 class ModInt{
   typedef long long ll;
 private:
-  static const int INF = 10000000;
-  int val;  
+  static const ll INF = 10000000;
+  int val;
+  void check_nonpositive() {
+    if(mod <= 0) {
+      throw "Modulo non-positive number is not allowed. It could be due to overflow or underflow";
+    }
+  }
+
+  void check_prime() {
+    for(int i = 0; (ll)(i)*ll(i) <= mod; i++) {
+      if(mod % i == 0) {
+	throw "Modulo composite number is not allowed. ";
+      }
+    }
+  }
+
+  void check() {
+    check_nonpositive();
+  }
+
+  void strict_check() {
+    check_nonpositive();
+    check_prime();
+  }
+  
+  template <typename T>
+  int normalize(T a) {
+    if(a < 0) {
+      T div = (-a) / mod;
+      a += div * mod;
+      if(a < 0) {
+	a += mod;
+      }
+    }else {
+      a %= mod;
+    }
+    return a;
+  }
+
 public:
-  ModInt<mod> ():val(0){};
-  ModInt<mod> (int a):val((a+mod)%mod){};
+  ModInt<mod> ():val(0){check();};
+  ModInt<mod> (int a):val(normalize(a)){check();};
+  ModInt<mod> (ll a):val(normalize(a)){check();};
   ModInt<mod> (const ModInt<mod>& a):val(a.val){};
   inline ModInt<mod> operator+= (const ModInt<mod>& a){
     val = (val + a.val + mod) % mod;
     return *this;
   }
   inline ModInt<mod> operator+= (int a){
-    val = (val + a + mod) % mod;
+    val = (val + normalize(a) + mod) % mod;
     return *this;
   }
   inline ModInt<mod> operator-= (const ModInt<mod>& a){
@@ -28,15 +66,15 @@ public:
     return *this;
   }
   inline ModInt<mod> operator-= (int a){
-    val =  (val - a + mod) % mod;
+    val =  (val - normalize(a) + mod) % mod;
     return *this;
   }
   inline ModInt<mod> operator*= (const ModInt<mod>& a){
-    val =  ((ll)val * a.val + mod) % mod;
+    val =  (val * a.val + mod) % mod;
     return *this;
   }
   inline ModInt<mod> operator*= (int a){
-    val =  ((ll)val * a + mod) % mod;
+    val =  (val * a + mod) % mod;
     return *this;
   }
   inline ModInt<mod> operator/= (const ModInt<mod>& a){
