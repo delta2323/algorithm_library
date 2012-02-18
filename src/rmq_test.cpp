@@ -112,3 +112,30 @@ TEST(rmq, minimum) {
     }
   }
 }
+
+TEST(rmq, vector_constructor) {
+  int n = 10;
+  vector<int> v(n);
+  for(size_t i = 0; i < n; ++i)  {
+    v[i] = i*(n-i);
+  }
+  ASSERT_NO_THROW(RMQ<int> rmq(v));
+}    
+
+TEST(rmq, vector_constructor2) {
+  int n = 10;
+  vector<int> v(n);
+  for(size_t i = 0; i < n; ++i)  {
+    v[i] = -i*(n-i);
+  }
+  cout << "here1" << endl;
+  RMQ<int> rmq(v);
+  cout << "here2" << endl;
+  for(int i = 0; i < n/2; ++i) {
+    ASSERT_EQ(rmq.mn(0, i+1), -i*(n-i));
+  }
+  cout << "here3" << endl;
+  for(int i = n/2; i < n; ++i) {
+    ASSERT_EQ(rmq.mn(0, i+1), -(n/2)*(n-(n/2)));
+  }
+}

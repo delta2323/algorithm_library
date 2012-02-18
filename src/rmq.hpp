@@ -120,14 +120,26 @@ private:
 public:
   RMQ(int _n) : n(_n){
     nn = 1;
-    while(n > nn) nn *= 2;    
+    while(n > nn) nn *= 2;
     val.resize(nn*2-1);
-    for(size_t i = 0;i<val.size();i++){
+    for(size_t i = 0; i < val.size(); ++i){
       val[i] = (static_cast<T>(INT_MAX));
     }
   }
-  RMQ(size_t _n){RMQ((int) _n);}
-  RMQ(){RMQ(0);}
+  RMQ(){}
+  RMQ(const std::vector<T>& v) {
+    n = static_cast<T>(v.size());
+    nn = 1;
+    while(n > nn) nn *= 2;
+    val.resize(nn*2-1);
+    for(size_t i = 0; i < val.size(); ++i){
+      val[i] = (static_cast<T>(INT_MAX));
+    }
+    for(size_t i = 0; i < v.size(); ++i) {
+      std::cout << "update" << i << std::endl;
+      update(i, v[i]);
+    }
+  }
 
   inline size_t size(){return n;}
 
