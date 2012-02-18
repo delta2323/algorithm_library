@@ -35,12 +35,15 @@ private:
    * function : query
    * used in function mn below
    */
-  int query(int a, int b, int k, int l,int r){
-    if(r<= a || b<= l) return INT_MAX;
-    if(a <= l && r <= b) return val[k];
-    else{
-      int vl = query(a,b,k*2+1, l, (l+r)/2);
-      int vr = query(a,b,k*2+2, (l+r)/2, r);
+  T query(int a, int b, int k, int l, int r){
+    if(r <= a || b <= l) {
+      return INT_MAX;
+    }
+    if(a <= l && r <= b) {
+      return val[k];
+    }else {
+      T vl = query(a, b, k*2+1, l, (l+r)/2);
+      T vr = query(a, b, k*2+2, (l+r)/2, r);
       return std::min(vl, vr);
     }
   }
@@ -84,7 +87,7 @@ public:
   /**
    * update the value so that rmq[i] = x 
    */
-  void update(int i, int x){
+  void update(int i, T x){
     if(i < 0 || n < i) {
       throw "out of range";
     }

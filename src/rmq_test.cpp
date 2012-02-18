@@ -42,6 +42,54 @@ TEST(rmq, update) {
   }
 }
 
+TEST(rmq, double_case_update) {
+  for(int n = 1; n < 1000; ++n) {
+    RMQ<double> rmq(n);
+    for(int idx = 0; idx < n; ++idx) {
+      rmq.update(idx, (double)(idx*10)+0.5);
+    }
+    for(int idx = 0; idx < n; ++idx) {
+      ASSERT_EQ((double)(idx*10)+0.5, rmq[idx]);
+    }
+ }
+}
+
+TEST(rmq, failed_case) {
+  int n = 2;
+  RMQ<double> rmq(n);
+  for(int idx = 0; idx < n; ++idx) {
+    rmq.update(idx, (double)(idx*10)+0.5);
+  }
+  int one = 1;
+  ASSERT_DOUBLE_EQ((double)((one-1)*10)+0.5, rmq.mn(0, one));
+}
+
+TEST(rmq, empty_set) {
+  for(int n = 1; n < 1000; ++n) {
+    RMQ<double> rmq(n);
+    for(int idx = 0; idx < n; ++idx) {
+      rmq.update(idx, (double)(idx*10)+0.5);
+    }
+
+    for(int idx = 0; idx < n; ++idx) {
+      ASSERT_THROW(rmq.mn(idx, idx), const char*);
+    }
+  }  
+}
+
+TEST(rmq, double_case_mn) {
+  for(int n = 1; n < 1000; ++n) {
+    RMQ<double> rmq(n);
+    for(int idx = 0; idx < n; ++idx) {
+      rmq.update(idx, (double)(idx*10)+0.5);
+    }
+
+    for(int idx = 1; idx <= n; ++idx) {
+      ASSERT_DOUBLE_EQ(0.5, rmq.mn(0, idx));
+    }
+  }
+}
+
 TEST(rmq, minimum) {
   for(int n = 1; n < 100; ++n) {
     vector<int> v(n);
