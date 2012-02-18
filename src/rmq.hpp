@@ -40,6 +40,9 @@ void Segment<T>::Swap(Segment<T>& a) {
   swap(mn, a.mn);
 }
 
+// This operator is inspired by this code.
+// http://www.codeforces.com/contest/150/submission/1193366
+
 template <typename T>
 Segment<T> Segment<T>::operator+=(const Segment<T>& b) {
   Segment<T> tmp(*this);
