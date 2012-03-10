@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include <climits>
+#include <limits>
 #include <cmath>
 
 template<typename T>
@@ -14,10 +14,16 @@ public:
   T left_min;
   T right_min;
   T mn;
-  Segment(){}
+  Segment(): sum(0),
+	     range_min(std::numeric_limits<T>::max()),
+	     left_min(std::numeric_limits<T>::max()),
+	     right_min(std::numeric_limits<T>::max()),
+	     mn(std::numeric_limits<T>::max()){}
   Segment(T x) : sum(x), range_min(x), left_min(x), right_min(x), mn(x){}
   Segment<T> operator=(const T& x);
   Segment<T> operator+=(const Segment<T>& b);
+private:
+  T add(T a, T b);
   void Swap(Segment<T>& tmp);
 };
   
@@ -40,16 +46,26 @@ void Segment<T>::Swap(Segment<T>& a) {
   swap(mn, a.mn);
 }
 
+template <typename T>
+T Segment<T>::add(T a, T b) {
+  T ret;
+  if(a == std::numeric_limits<T>::max() || b == std::numeric_limits<T>::max()) {
+    ret = std::numeric_limits<T>::max();
+  }else {
+    ret = a + b;
+  }
+  return ret;
+}
+
 // This operator is inspired by this code.
 // http://www.codeforces.com/contest/150/submission/1193366
-
 template <typename T>
 Segment<T> Segment<T>::operator+=(const Segment<T>& b) {
   Segment<T> tmp(*this);
   tmp.sum = this->sum + b.sum;
   tmp.range_min = min(min(this->range_min, b.range_min), this->right_min+b.left_min);
-  tmp.left_min = min(this->left_min, this->sum+b.left_min);
-  tmp.right_min = min(this->right_min+b.sum, b.right_min);
+  tmp.left_min = min(this->left_min, add(this->sum, b.left_min));
+  tmp.right_min = min(add(this->right_min, b.sum), b.right_min);
   tmp.mn = min(this->mn, b.mn);
   Swap(tmp);
   return *this;
@@ -91,7 +107,7 @@ private:
    */
   Segment<T> query(int a, int b, int k, int l, int r){
     if(r <= a || b <= l) {
-      return INT_MAX;
+      return Segment<T>();
     }
     if(a <= l && r <= b) {
       return val[k];
@@ -126,7 +142,7 @@ public:
     while(n > nn) nn *= 2;
     val.resize(nn*2-1);
     for(size_t i = 0; i < val.size(); ++i){
-      val[i] = (static_cast<T>(INT_MAX));
+      val[i] = (std::numeric_limits<T>::max());
     }
   }
   RMQ(){}
@@ -136,10 +152,9 @@ public:
     while(n > nn) nn *= 2;
     val.resize(nn*2-1);
     for(size_t i = 0; i < val.size(); ++i){
-      val[i] = (static_cast<T>(INT_MAX));
+      val[i] = (std::numeric_limits<T>::max());
     }
     for(size_t i = 0; i < v.size(); ++i) {
-      std::cout << "update" << i << std::endl;
       update(i, v[i]);
     }
   }
