@@ -118,13 +118,14 @@ private:
     }
   }
 
-  void bound_check(int a, int b) {
+  bool bound_check(int a, int b) {
     if(a >= b) {
-      throw "empty set";
+      return false;
     }
     if(a < 0 || n < b) {
-      throw "out of range";
+      return false;
     }
+    return true;
   }
   /**
    * structure of val is as follows
@@ -192,7 +193,9 @@ public:
    * return the minimum value in rmq[a,b)
    */
   T mn(int a, int b){
-    bound_check(a, b);
+    if(!bound_check(a, b)) {
+      throw "invalid range";
+    }
     return query(a, b, 0, 0, nn).mn;
   }
 
@@ -200,7 +203,9 @@ public:
    * return min_{a<=i<j<b} sum[i,j)
    */
   T range_min(int a, int b){
-    bound_check(a, b);
+    if(!bound_check(a, b)) {
+      throw "invalid range";
+    }
     return query(a, b, 0, 0, nn).range_min;
   }
 
@@ -208,7 +213,9 @@ public:
    * return sum[a,b)
    */
   T sum(int a, int b){
-    bound_check(a, b);
+    if(!bound_check(a, b)) {
+      return T();
+    }
     return query(a, b, 0, 0, nn).sum;
   }
 };
