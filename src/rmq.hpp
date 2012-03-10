@@ -170,7 +170,6 @@ public:
     if(idx < 0 || n < idx) {
       throw "out of range";
     }
-
     return val[idx+nn-1].mn;
   }
 

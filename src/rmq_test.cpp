@@ -8,7 +8,7 @@
 
 using namespace std;
 
-TEST(rmq, oridinal_usage1) {
+TEST(rmq, ordinal_usage1) {
   srand(time(NULL));
 
   int n = 10;
@@ -116,7 +116,7 @@ TEST(rmq, minimum) {
 TEST(rmq, vector_constructor) {
   int n = 10;
   vector<int> v(n);
-  for(size_t i = 0; i < n; ++i)  {
+  for(int i = 0; i < n; ++i)  {
     v[i] = i*(n-i);
   }
   ASSERT_NO_THROW(RMQ<int> rmq(v));
