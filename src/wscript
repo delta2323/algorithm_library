@@ -11,17 +11,38 @@ def build(bld):
       use = 'PTHREAD',
       target = test_module)
 
-  libs2 = ['msp', 'edit_distance', 'kmp', 'unionfind', 'z_algorithm', 'dijkstra']
+  libs2 = [ 'msp'
+          , 'edit_distance'
+          , 'kmp'
+          , 'unionfind'
+          , 'z_algorithm'
+          , 'dijkstra'
+          , 'scc']
 
-  for lib in libs2:
-    source_file_cpp = lib + '.cpp'
+  dependencies = [ []
+  	         , []      
+		 , []
+		 , []
+		 , []
+		 , []
+		 , ['unionfind']
+  ] 
+
+  for i in xrange(len(libs2)):
+    lib = libs2[i]
+    dependency = dependencies[i]
+
+    source_files_cpp = []
+    source_files_cpp.append(lib + '.cpp')
+    source_files_cpp.extend(map(lambda d: d+'.cpp', dependency))
+
     source_file_hpp = lib + '.hpp'
     source_file_test = lib + '_test.cpp'
     test_module = lib + '_test'
-    target_module = lib.upper();
+    target_module = lib.upper()
 
     bld.stlib(
-      source = source_file_cpp,
+      source = source_files_cpp,
       includes = '.',
       use = 'PTHREAD',
       target = target_module)
