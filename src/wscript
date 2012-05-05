@@ -17,7 +17,8 @@ def build(bld):
           , 'unionfind'
           , 'z_algorithm'
           , 'dijkstra'
-          , 'scc']
+          , 'scc'
+          , 'lca']
 
   dependencies = [ []
   	         , []      
@@ -26,6 +27,7 @@ def build(bld):
 		 , []
 		 , []
 		 , ['unionfind']
+		 , []
   ] 
 
   for i in xrange(len(libs2)):
