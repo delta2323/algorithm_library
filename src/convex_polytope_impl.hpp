@@ -1,6 +1,9 @@
 #ifndef CONVEX_POLYTOPE_IMPL_HPP__
 #define CONVEX_POLYTOPE_IMPL_HPP__
 
+#include "line.hpp"
+#include "approx.hpp"
+
 template <typename T>
 ConvexPolytope<T>::ConvexPolytope(const std::vector<Point2<T> >& ps) : ps_(ps), diameter_(kINVALID){}
 
@@ -88,7 +91,47 @@ double ConvexPolytope<T>::calc_diameter() const {
 }
 
 template <typename T>
-bool ConvexPolytope<T>::is_inside(const Point2<T>& p) const {
+bool ConvexPolytope<T>::is_on_edges(const Point2<T>& p) {
+  if(convex_hull_.empty()) {
+    convex_hull();
+  }
+  size_t m = convex_hull_.size();
+  for(size_t i = 0; i < m; ++i) {
+    Point2<T>& q = convex_hull_[i];
+    Point2<T>& r = convex_hull_[(i+1)%m];
+    if(on_segment(Line<T>(q, r), p, true)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+template <typename T>
+bool ConvexPolytope<T>::is_interior(const Point2<T>& p) {
+  if(convex_hull_.empty()) {
+    convex_hull();
+  }
+  size_t m = convex_hull_.size();
+
+  Point2<T>& q0 = convex_hull_[0];
+  Point2<T>& r0 = convex_hull_[1];
+  T det = (q0-p).det(r0-p);
+  if(approx_zero(det)) {
+    return false;
+  }
+  bool reference_dir = approx_negative(det);
+  for(size_t i = 1; i < m; ++i) {
+    Point2<T>& q = convex_hull_[i];
+    Point2<T>& r = convex_hull_[(i+1)%m];
+    T det = (q-p).det(r-p);
+    if(approx_zero(det)) {
+      return false;
+    }
+    bool dir = approx_negative(det);
+    if(reference_dir != dir) {
+      return false;
+    }
+  }
   return true;
 }
 

@@ -17,7 +17,8 @@ public:
   ConvexPolytope(const std::vector<Point2<T> >& ps);
   void get_convex_hull(std::vector<Point2<T> >& ret);
   double diameter();
-  bool is_inside(const Point2<T>& p) const; // not implemeted yet.
+  bool is_on_edges(const Point2<T>& p); // not implemeted yet.
+  bool is_interior(const Point2<T>& p); // not implemeted yet.
 private:
   const static double kINVALID = -1.f;
   void convex_hull();
