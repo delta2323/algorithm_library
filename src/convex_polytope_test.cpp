@@ -8,19 +8,21 @@
 
 using namespace std;
 
-class TriangleTest : public ::testing::Test{
+const static Point2<double> v[6] = { Point2<double>(200, 0, 0),
+				     Point2<double>(100, 1, 0),
+				     Point2<double>(0  , 0, 1), // vertices
+				     Point2<double>(500, 0, 0.5),
+				     Point2<double>(400, 0.5, 0),
+				     Point2<double>(300, 0.5, 0.5) }; // midpoints
+class TriangleTest : public ::testing::TestWithParam<Point2<double> > {
 public:
 protected:
+  TriangleTest() :n(3) {}
   virtual void SetUp() {
-    n = 3;
-    ps.clear();
-    ps.push_back(Point2<double>(200, 0, 0));
-    ps.push_back(Point2<double>(100, 1, 0));
-    ps.push_back(Point2<double>(0  , 0, 1));
+    ps.clear(); ps.assign(v, v+n);
     cp = new ConvexPolytope<double>(ps);
   }
   virtual void TearDown() {}
-
 protected:
   int n;
   ConvexPolytope<double>* cp;
@@ -59,29 +61,19 @@ TEST_F(TriangleTest, is_interior_ordinal) {
   Point2<double> o(300, 0.2, 0.2);
   ASSERT_TRUE(cp->is_interior(o));
 }
-TEST_F(TriangleTest, is_interior_vertex1) {
-  Point2<double> o(300, 0, 0);
-  ASSERT_FALSE(cp->is_interior(o));
+TEST_F(TriangleTest, is_on_edges_ordinal) {
+  Point2<double> o(300, 0.2, 0.2);
+  ASSERT_FALSE(cp->is_on_edges(o));
 }
-TEST_F(TriangleTest, is_interior_vertex2) {
-  Point2<double> o(300, 1, 0);
-  ASSERT_FALSE(cp->is_interior(o));
+
+INSTANTIATE_TEST_CASE_P(TriangleTestInstance,
+                        TriangleTest,
+                        testing::ValuesIn(v));
+TEST_P(TriangleTest, is_interior_circumstances) {
+  ASSERT_FALSE(cp->is_interior(GetParam()));
 }
-TEST_F(TriangleTest, is_interior_vertex3) {
-  Point2<double> o(300, 0, 1);
-  ASSERT_FALSE(cp->is_interior(o));
-}
-TEST_F(TriangleTest, is_interior_midpoint_of_edge1) {
-  Point2<double> o(300, 0, 0.5);
-  ASSERT_FALSE(cp->is_interior(o));
-}
-TEST_F(TriangleTest, is_interior_midpoint_of_edge2) {
-  Point2<double> o(300, 0.5, 0);
-  ASSERT_FALSE(cp->is_interior(o));
-}
-TEST_F(TriangleTest, is_interior_midpoint_of_edge3) {
-  Point2<double> o(300, 0.5, 0.5);
-  ASSERT_FALSE(cp->is_interior(o));
+TEST_P(TriangleTest, is_on_edges_circumstances) {
+  ASSERT_TRUE(cp->is_on_edges(GetParam()));
 }
 
 class SquareTest : public ::testing::Test {
