@@ -156,3 +156,11 @@ TEST(rmq, sum) {
     ASSERT_EQ(rmq.sum(0, i+1), sum[i]);
   }
 }
+
+TEST(rmq, one_elem) {
+  int n = 1;
+  RMQ<int> rmq(n);
+  rmq.update(0, 10);
+  ASSERT_EQ(10, rmq.mn(0, 1));
+  
+}
