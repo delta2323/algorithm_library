@@ -16,6 +16,9 @@ bool approx_negative(double d) {
   return d < -eps;
 }
 
+// Original implementation of on_segment and intersection is
+// from "Programming Contest Challenge Book (2nd ed.)"  pp226-227
+
 template <typename T>
 bool on_segment(const Line<T> l,
 		const Point2<T>& q,
