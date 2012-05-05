@@ -1,5 +1,6 @@
 def build(bld):
-  libs = ['modint', 'bit', 'rmq']
+#  libs = ['modint', 'bit', 'rmq', 'point', 'line', 'convex_polytope']
+  libs = ['modint', 'bit', 'rmq', 'point', 'line']
 
   for lib in libs:
     test_module = lib + '_test'
