@@ -18,7 +18,6 @@ struct Line {
   Line(Point2<T> from, Point2<T> to) : id_(kINVALID), from_(from), to_(to) {}
 };
 
-const static double eps = 1e-10;
 template <typename T>
 bool on_segment(const Line<T> l,
 		const Point2<T>& p,

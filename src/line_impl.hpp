@@ -1,20 +1,10 @@
 #ifndef LINE_IMPL_HPP__
 #define LINE_IMPL_HPP__
 
+#include "approx.hpp"
+
 template <typename T>
 Line<T>::Line(const Line<T>& p) : id_(p.id_), from_(p.from_), to_(p.to_){}
-
-bool approx_zero(double d) {
-  return abs(d) < eps;
-}
-
-bool approx_non_positive(double d) {
-  return d < eps;
-}
-
-bool approx_negative(double d) {
-  return d < -eps;
-}
 
 // Original implementation of on_segment and intersection is
 // from "Programming Contest Challenge Book (2nd ed.)"  pp226-227
