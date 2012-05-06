@@ -3,7 +3,7 @@
 
 #include "lca.hpp"
 #include "rmq.hpp"
-
+#include "print.hpp"
 
 using namespace std;
 
@@ -14,12 +14,12 @@ void LCA::init(const vector<vector<int> >& adj_list, int root) {
   root_ = root;
   adj_ = adj_list;
   
-  id2bfsid_.clear(); id2bfsid_.resize(n_);
+  id2bfsid_.clear(); id2bfsid_.resize(n_, -1);
   bfsid2id_.clear();
   bfs();
 
   euler_.clear();
-  id2euler_.clear(); id2euler_.resize(n_);
+  id2euler_.clear(); id2euler_.resize(n_, -1);
   dfs(root);
 }
 
@@ -28,6 +28,9 @@ void LCA::bfs() {
   q.push(root_);
   while(!q.empty()) {
     int now = q.front(); q.pop();
+    if(id2bfsid_[now] != -1) {
+      continue;
+    }
     id2bfsid_[now] = static_cast<int>(bfsid2id_.size());
     bfsid2id_.push_back(now);
     for(size_t i = 0; i < adj_[now].size(); ++i) {
@@ -41,7 +44,11 @@ void LCA::dfs(int now) {
   rmq.update(euler_.size(), id2bfsid_[now]);
   euler_.push_back(now);
   for(size_t i = 0; i < adj_[now].size(); ++i) {
-    dfs(adj_[now][i]);
+    int next = adj_[now][i];
+    if(id2euler_[next] != -1) {
+      continue;
+    }
+    dfs(next);
     rmq.update(euler_.size(), id2bfsid_[now]);
     euler_.push_back(now);
   }
@@ -58,7 +65,6 @@ int LCA::query(int x, int y) {
 }
 
 
-#include "../../../print.hpp"
 
 void LCA::dump() {
   cout << "id2bfsid" << endl;
